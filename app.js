@@ -70,7 +70,8 @@ passport.serializeUser(function(user, cb) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://anonymous-vhve.onrender.com/auth/google/secrets"
+    /* Use below : "http://localhost:3000/auth/google/anonymous/" only when deploying locally */
+    callbackURL: "https://anonymous-vhve.onrender.com/auth/google/anonymous"
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log(profile);
