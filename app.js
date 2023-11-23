@@ -4,14 +4,11 @@ const bodyParser=require("body-parser");
 const ejs=require("ejs");
 const mongoose=require("mongoose");
 const session=require("express-session");
+const MemoryStore = require('memorystore')(session)
 const passport=require("passport");
 const passportLocalMongoose=require("passport-local-mongoose");
 const GoogleStrategy=require("passport-google-oauth20").Strategy;
 const findOrCreate=require("mongoose-findorcreate");
-// const bcrypt=require("bcrypt");
-// const saltRounds=1;
-//const md5=require("md5");
-//const encrypt=require("mongoose-encryption");
 
 const app=express();
 
@@ -20,10 +17,19 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 app.use(session({
-    secret: "Our little secret",
+    cookie: { maxAge: 86400000 },
+    store: new MemoryStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    }),
     resave: false,
-    saveUninitialized: false
-}));
+    secret: 'keyboard cat'
+}))
+
+// app.use(session({
+//     secret: "Our little secret",
+//     resave: false,
+//     saveUninitialized: false
+// }));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -40,21 +46,9 @@ const userSchema=new mongoose.Schema({
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 
-//userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields:["password"]});
-
 const User=new mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
-
-// passport.serializeUser(function(user, done){
-//     done(null, user.id);
-// });
-
-// passport.deserializeUser(function(id, done){
-//     User.findbyId(id, function(err, user){
-//         done(err, user);
-//     });
-// });
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -165,19 +159,6 @@ app.post("/register", function(req, res){
         }
     });
 
-    // bcrypt.hash(req.body.password, saltRounds).then(function(hash){
-    //     const newUser=new User({
-    //         email: req.body.username,
-    //         password: hash
-    //     });
-    
-    //     newUser.save().then(function(){
-    //         res.render("secrets");
-    //     }).catch(function(err){
-    //         console.log(err);
-    //     });
-    // });
-
 });
 
 app.post("/login", function(req, res){
@@ -197,22 +178,6 @@ app.post("/login", function(req, res){
             });
         }
     })
-
-    // const username=req.body.username;
-    // const password=req.body.password;
-
-    
-
-    // User.findOne({email: username}).then(function(foundUser){
-
-    //     bcrypt.compare(password, foundUser.password, function(err, result) {
-    //         if(result==true){
-    //             res.render("secrets");
-    //         }
-    //     });
-    // }).catch(function(err){
-    //     console.log(err);
-    // });
 
 });
 
