@@ -1,0 +1,17 @@
+
+body {
+  background: rgb(252,176,69);
+  background: linear-gradient(90deg, rgba(252,176,69,1) 0%, rgba(136,48,160,1) 100%, rgba(5,93,223,1) 100%, rgba(131,58,180,1) 100%);
+}
+
+.centered {
+    padding-top: 200px;
+    text-align: center;
+}
+
+.secret-text {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+  background-color: #000;
+}
