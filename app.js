@@ -36,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // mongoose.connect("mongodb://127.0.0.1:27017/userDB", {useNewUrlParser: true});
-mongoose.connect("mongodb+srv://lalitchauhan__:Password00@todolist.akglz1b.mongodb.net/anonymousDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://lalitchauhan__:hilalit@todolist.akglz1b.mongodb.net/anonymousDB", {useNewUrlParser: true});
 
 const userSchema=new mongoose.Schema({
     email: String,
